@@ -1,0 +1,64 @@
+Given a string S, the task is to count number of subsequences of the form aibjck, where i >= 1, j >=1 and k >= 1.
+
+Note: 
+1. Two subsequences are considered different if the set of array indexes picked for the 2 subsequences are different.
+2.  For large test cases, the output value will be too large, return the answer MODULO 10^9+7
+
+ 
+
+Example 1:
+
+Input:
+S = "abbc"
+Output: 3
+Explanation: Subsequences are abc, abc and abbc.
+
+Example 2:
+
+Input:
+S = "abcabc"
+Output: 7
+Explanation: Subsequences are abc, abc,
+abbc, aabc abcc, abc and abc.
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function fun() which takes the string S as input parameter and returns the number of subsequences which follows given condition.
+
+
+Expected Time Complexity: O(Length of String).
+Expected Auxiliary Space: O(1) .
+
+
+Constraints:
+1 <= |S| <= 105
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.................Solution...................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+class Solution{
+  public:
+    // s : given string
+    // return the expected answer
+    int fun(string &s) {
+        //code here
+        const long long int MOD = 1e9 + 7;
+        long long int a = 0, ab = 0, abc = 0;
+        
+        for(char ch: s) {
+            // 1. Append a to a's
+            // 2. Start new string with a.
+            if(ch == 'a') a = (2 * a % MOD + 1) % MOD;
+            
+            // 1. Append b to ab's
+            // 2. Append b directly to a's
+            if(ch == 'b') ab = (2 * ab % MOD + a) % MOD;
+            
+            // 1. Append c to abc's
+            // 2. Append c directly to ab's
+            if(ch == 'c') abc = (2 * abc % MOD + ab) % MOD;
+        }
+        
+        return abc;
+    }
+};
