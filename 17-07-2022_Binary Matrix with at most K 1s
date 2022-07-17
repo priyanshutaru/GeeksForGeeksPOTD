@@ -1,0 +1,83 @@
+Given a binary matrix M with R rows and C columns, where each element of the matrix will be 0 or 1. Find the largest square that can be formed with center (i, j) and contains atmost K 1’s. There are Q queries, a single query has two integers denoting the centre (i,j) of the square.
+
+ 
+
+Example 1:
+
+Input:
+R = 4, C = 5
+M = {{1, 0, 1, 0, 0} 
+     {1, 0, 1, 1, 1} 
+     {1, 1, 1, 1, 1} 
+     {1, 0, 0, 1, 0}}
+K = 9, Q = 1
+q_i[] = {1}
+q_j[] = {2}
+Output:
+3
+Explanation:
+Maximum length square with center
+at (1, 2) that can be formed is of
+3 length from (0, 1) to (2, 4).
+Example 2:
+Input:
+R = 3, C = 3
+M = {{1, 1, 1} 
+     {1, 1, 1} 
+     {1, 1, 1}}
+K = 9, Q = 2
+q_i[] = {1, 2}
+q_j[] = {1, 2}
+Output :
+3 1
+
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function largestSquare() which takes 2 integers R, and C followed by a list of lists M denoting the binary matrix and then three integers i,j, and K as input and returns a list of integers denting the largest Square possible for each query.
+
+
+Expected Time Complexity: O(R*C + Q*log(MIN_DIST)), where MIN_DIST is the minimum distance of the center from the edges of the matrix where MIN_DIST is the minimum distance of the center from the edges of the matrix.
+Expected Auxiliary Space: O(R*C)
+
+
+Constraints:
+1 ≤ R,C ≤ 500
+1 ≤ Q ≤ 104
+0 ≤ K ≤ R*C
+0 ≤ i < R
+0 ≤ j < C
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@........................Solution........................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+class Solution {
+  public:
+    vector<int> largestSquare(vector<vector<int>> M, int R, int C, int K, int Q, int q_i[], int q_j[]) {
+        // code here
+          vector<vector<int>> sum(R+1, vector<int>(C+1));
+        
+        for(int i=1; i<=R; i++) 
+        for(int j=1; j<=C; j++) 
+        sum[i][j] = M[i-1][j-1] + sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1];
+         
+        // Result vector
+        vector<int> res(Q);
+        
+        //Proceed on queries.
+        for(int q=0; q<Q; q++) {
+            int x = q_i[q]+1, y = q_j[q]+1, val = M[x-1][y-1], side = 1;
+            
+            while(x-side>=0 and y-side>=0 and x<=R and y<=C) {
+                val = sum[x][y] + sum[x-side][y-side] - sum[x-side][y] - sum[x][y-side];
+                
+                if(val <= K) res[q] = side;
+                else { 
+                    break;
+                }
+                
+                x += 1; y += 1;
+                side += 2;
+            }
+            
+        }
+        return res;
+    }
+};
