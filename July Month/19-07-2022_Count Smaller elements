@@ -1,0 +1,73 @@
+Given an array Arr of size N containing positive integers. Count number of smaller elements on right side of each array.
+
+Example 1:
+
+Input:
+N = 7
+Arr[] = {12, 1, 2, 3, 0, 11, 4}
+Output: 6 1 1 1 0 1 0
+Explanation: There are 6 elements right
+after 12. There are 1 element right after
+1. And so on.
+Example 2:
+
+Input:
+N = 5
+Arr[] = {1, 2, 3, 4, 5}
+Output: 0 0 0 0 0
+Explanation: There are 0 elements right
+after 1. There are 0 elements right after
+2. And so on.
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function constructLowerArray() which takes the array of integers arr and n as parameters and returns an array of integers denoting the answer.
+
+Expected Time Complexity: O(N*logN)
+Expected Auxiliary Space: O(N)
+
+Constraints:
+1 ≤ N ≤ 106
+0 ≤ Arri  ≤ 108
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.........................Solution........................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@222
+
+
+
+class Solution{
+public:	
+	int bs(vector<int>&nums,int x)
+    {
+        int l = 0, r=  nums.size()-1;
+       
+        while(l<=r)
+        {
+            int mid = (l+r)/2;
+            if(nums[mid]>=x)
+               r = mid-1;
+           
+            else
+            {
+               int ans = mid;
+                l = mid+1;
+            }
+        }
+        
+        return l;
+    }
+
+	vector<int> constructLowerArray(int *arr, int n) 
+	{
+	   vector<int>ans(n,0);
+	   vector<int>res;
+	   
+	   res.push_back(arr[n-1]);
+	   for(int i=n-2;i>=0;i--)
+	   {
+	      int idx = bs(res,arr[i]);
+	      ans[i] = idx;
+	      res.insert(res.begin()+idx,arr[i]);
+	       
+	   }
+	    return ans;
+	}
+};
