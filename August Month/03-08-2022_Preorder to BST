@@ -1,0 +1,105 @@
+Given an array arr[] of N nodes representing preorder traversal of some BST. You have to build the exact BST from it's given preorder traversal. 
+In Pre-Order traversal, the root node is visited before the left child and right child nodes.
+
+Example 1:
+
+Input:
+N = 5
+arr[]  = {40,30,35,80,100}
+Output: 35 30 100 80 40
+Explanation: PreOrder: 40 30 35 80 100
+InOrder: 30 35 40 80 100
+Therefore, the BST will be:
+              40
+           /      \
+         30       80
+           \        \   
+           35      100
+Hence, the postOrder traversal will
+be: 35 30 100 80 40
+Example 2:
+
+Input:
+N = 8
+arr[]  = {40,30,32,35,80,90,100,120}
+Output: 35 32 30 120 100 90 80 40
+Your Task:
+You need to complete the given function and return the root of the tree. The driver code will then use this root to print the post order traversal.
+
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(N).
+
+Constraints:
+1 <= N <= 103
+1 <= arr[i] <= 104
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@......................Solution.........................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+class Solution{
+public:
+
+    Node* solve(int pre[], int &index,
+     		int min, int max, int &n) 
+    {
+        
+      if(index >= n) return NULL;
+        
+     // out of the limit
+    if(pre[index] < min || pre[index] > max)
+          return NULL;
+      
+     // look carefully the below sntax
+     // here we do mistake   
+     Node* node = newNode(pre[index++]);
+        
+     node->left  = 
+      solve(pre, index, min, node->data, n);
+        
+     node->right =
+      solve(pre, index, node->data, max, n);
+        
+     return node;
+  }
+
+  Node* post_order(int pre[], int size) {
+        
+    int index = 0;
+    int n = size;
+        
+   	return solve(pre, index, 0, INT_MAX, n);
+ }
+
+};
+
+//{ Driver Code Starts.
+
+
+int main()
+{
+    // Note that size of arr[] is considered 100 according to
+    // the constraints mentioned in problem statement.
+    int arr[1000], x, t, n;
+
+    // Input the number of test cases you want to run
+    cin >> t;
+
+    // One by one run for all input test cases
+    while (t--)
+    {
+        // Input the size of the array
+        cin >> n;
+
+        // Input the array
+        for (int i=0; i<n; i++)
+            cin >> arr[i];
+        
+        Solution ob;
+        printPostorder(ob.post_order(arr, n));
+        cout << endl;
+    }
+    return 0;
+}
+
+// } Driver Code Ends
